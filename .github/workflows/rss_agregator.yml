@@ -33,11 +33,11 @@ jobs:
      - name: run-main-lint
        run: make lint
       # Runs a single command using the runners shell
-     - name: run-main-test
-       run: make test
-     - name: Test & publish code coverage
-       uses: paambaati/codeclimate-action@v2.6.0
-       env:
-        CC_TEST_REPORTER_ID: ${{ secrets.HEXLET_ID }}
-       with:
-        coverageCommand: make coverage
+     #- name: run-main-test
+     #  run: make test
+    # - name: Test & publish code coverage
+     #  uses: paambaati/codeclimate-action@v2.6.0
+     #  env:
+      #  CC_TEST_REPORTER_ID: ${{ secrets.HEXLET_ID }}
+     #  with:
+      #  coverageCommand: make coverage
