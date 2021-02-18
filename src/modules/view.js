@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 
 const view = (state) => {
-  const watchedState = onChange(state, (path, value) => {
+  const watchedState = onChange(state, () => {
     // console.log(state);
   });
 
