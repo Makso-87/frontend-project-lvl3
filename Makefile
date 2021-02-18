@@ -1,6 +1,9 @@
 install:
 	sudo npm install
 
+start:
+	npm run start
+
 build:
 	sudo npm run build
 
