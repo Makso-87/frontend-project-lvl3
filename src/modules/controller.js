@@ -1,30 +1,36 @@
+/* eslint-env browser */
 import axios from 'axios';
 import _ from 'lodash';
-import { validateForm, parseRSS } from '../utils/index';
+import {
+  validateForm, makeNewFeed, renderErrors, updatePosts,
+} from '../utils/index';
 
 const controller = (state) => {
-  // eslint-disable-next-line no-undef
   const form = document.querySelector('#form');
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    // eslint-disable-next-line no-undef
     const formData = new FormData(e.target);
-    const link = formData.get('link');
+    state.form.data.link = formData.get('link');
+    console.log(formData);
 
-    if (_.isEmpty(validateForm(link))) {
-      // eslint-disable-next-line no-param-reassign
-      state.form.value = link;
+    axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(state.form.data.link)}`)
+      .then((response) => {
+        state.form.data.responseData = response.data.contents;
+        const errors = validateForm(state);
 
-      axios.get(state.form.value)
-        .then((response) => {
-          console.log(response);
-        });
+        if (_.isEmpty(errors)) {
+          const newFeed = makeNewFeed(response.data.contents, state.form.data.link);
+          state.feeds.push(newFeed);
 
-      parseRSS();
-    }
-
-    console.log(state.form.value);
+          setTimeout(() => {
+            updatePosts(state);
+          }, 5000);
+        } else {
+          state.errors = errors;
+          renderErrors(state);
+        }
+      });
   });
 };
 
