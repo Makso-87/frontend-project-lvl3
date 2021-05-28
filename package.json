@@ -2,7 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "Learning hexlet prooject",
-  "main": "src/index.js",
+  "main": "src/init.js",
   "files": [
     "dist"
   ],
