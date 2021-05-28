@@ -1,19 +1,17 @@
 import onChange from 'on-change';
 import { render, renderErrors } from '../utils/index';
+import controller from './controller';
 
-const view = (state) => {
-  const watchedState = onChange(state, (path) => {
-    if (path === 'feeds') {
-      // console.log(state.feeds);
-      render(state.feeds);
-    }
+const view = (state) => onChange(state, (path) => {
+  if (path === 'feeds' || path === 'posts') {
+    render(state);
+  }
 
-    if (path === 'errors') {
-      renderErrors(state);
-    }
-  });
+  if (path === 'errors') {
+    renderErrors(state);
+  }
 
-  return watchedState;
-};
+  controller(view(state));
+});
 
 export default view;
