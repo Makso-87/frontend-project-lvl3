@@ -15,7 +15,7 @@ const controller = (state) => {
     // eslint-disable-next-line no-param-reassign
     state.form.data.link = formData.get('url');
 
-    axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(state.form.data.link)}&disableCache=true`)
+    axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${state.form.data.link}&disableCache=true`)
       .then((response) => {
         // eslint-disable-next-line no-param-reassign
         state.form.data.responseData = response.data.contents;
