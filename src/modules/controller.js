@@ -13,7 +13,7 @@ const controller = (state) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     // eslint-disable-next-line no-param-reassign
-    state.form.data.link = formData.get('add');
+    state.form.data.link = formData.get('url');
 
     axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(state.form.data.link)}&disableCache=true`)
       .then((response) => {
