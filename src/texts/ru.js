@@ -14,7 +14,8 @@ const ru = {
       errors: {
         notValidURL: 'Ссылка должна быть валидным URL',
         notUnique: 'RSS уже существует',
-        notValidRSS: 'Ресурс не содержит валидный RSS',
+        notRSS: 'Ресурс не содержит валидный RSS',
+        notFilled: 'Строка ввода не должна быть пустой',
       },
     },
   },

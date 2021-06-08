@@ -16,7 +16,8 @@ const validateForm = (state) => {
   setLocale({
     string: {
       url: i18n.t('form.errors.notValidURL'),
-      matches: i18n.t('form.errors.notValidRSS'),
+      matches: i18n.t('form.errors.notRSS'),
+      min: i18n.t('form.errors.notFilled'),
     },
     array: {
       length: i18n.t('form.errors.notUnique'),
@@ -25,6 +26,8 @@ const validateForm = (state) => {
 
   const schema = yup.object()
     .shape({
+      field: yup.string()
+        .min(1),
       url: yup.string()
         .url(),
       unique: yup.array()
@@ -34,6 +37,7 @@ const validateForm = (state) => {
     });
 
   const checkingFields = {
+    field: state.form.data.link,
     url: state.form.data.link,
     unique: checkToUniqURL(state),
     response: state.form.data.responseData,
