@@ -16,7 +16,6 @@ const validateForm = (state) => {
   setLocale({
     string: {
       url: i18n.t('form.errors.notValidURL'),
-      matches: i18n.t('form.errors.notRSS'),
       min: i18n.t('form.errors.notFilled'),
     },
     array: {
@@ -32,14 +31,36 @@ const validateForm = (state) => {
         .url(),
       unique: yup.array()
         .length(0),
-      response: yup.string()
-        .matches(/<\/rss>/),
     });
 
   const checkingFields = {
     field: state.form.data.link,
     url: state.form.data.link,
     unique: checkToUniqURL(state),
+  };
+
+  try {
+    schema.validateSync(checkingFields, { abortEarly: false });
+    return {};
+  } catch (error) {
+    return _.keyBy(error.inner, 'path');
+  }
+};
+
+const validateRSS = (state) => {
+  setLocale({
+    string: {
+      matches: i18n.t('form.errors.notRSS'),
+    },
+  });
+
+  const schema = yup.object()
+    .shape({
+      response: yup.string()
+        .matches(/<\/rss>/),
+    });
+
+  const checkingFields = {
     response: state.form.data.responseData,
   };
 
@@ -84,13 +105,11 @@ const makeNewFeed = (data, link) => {
   const [channel] = rss.children;
   const normalized = extractItemData(channel);
 
-  const feed = {
+  return {
     ...normalized,
     items: normalized.items.map((item) => extractItemData(item)),
     link,
   };
-
-  return feed;
 };
 
 const showModal = (event, state) => {
@@ -108,7 +127,7 @@ const showModal = (event, state) => {
   const descriptionWithoutLink = description.slice(0, endIndex);
 
   modalTitle.textContent = post.title;
-  modalBody.textContent = descriptionWithoutLink;
+  modalBody.innerHTML = descriptionWithoutLink;
   modalLink.setAttribute('href', post.link);
 
   // console.log(description);
@@ -117,7 +136,6 @@ const showModal = (event, state) => {
 };
 
 const setVisited = (event, state) => {
-  // debugger;
   const button = event.currentTarget;
   const currentPostId = button.closest('.list-group-item')
     .getAttribute('id');
@@ -165,7 +183,12 @@ const render = (state) => {
     const postLink = document.createElement('a');
     const postButton = document.createElement('button');
     const itemLinkClasses = ['text-decoration-none'];
-    post.visited ? itemLinkClasses.push('fw-normal') : itemLinkClasses.push('fw-bold');
+
+    if (post.visited) {
+      itemLinkClasses.push('fw-normal');
+    } else {
+      itemLinkClasses.push('fw-bold');
+    }
 
     postButton.classList.add('btn', 'btn-primary', 'btn-sm');
     postListItem.classList.add('list-group-item', 'd-flex', 'justify-content-between');
@@ -182,6 +205,15 @@ const render = (state) => {
     postListItem.append(postLink);
     postListItem.append(postButton);
     postsList.append(postListItem);
+
+    postButton.addEventListener('click', (event) => {
+      showModal(event, state);
+      setVisited(event, state);
+    });
+
+    postLink.addEventListener('click', (event) => {
+      setVisited(event, state);
+    });
   });
 
   formInput.classList.remove('is-invalid');
@@ -221,7 +253,7 @@ const renderErrors = (state) => {
 
 const updatePosts = (state) => {
   state.feeds.forEach((feed) => {
-    axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(feed.link)}&disableCache=true`)
+    axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${feed.link}&disableCache=true`)
       .then((response) => {
         const newFeed = makeNewFeed(response.data.contents, feed.link);
 
@@ -253,5 +285,5 @@ const updatePosts = (state) => {
 
 export {
   validateForm, render, makeNewFeed, renderErrors, updatePosts, showModal,
-  setVisited,
+  setVisited, validateRSS,
 };

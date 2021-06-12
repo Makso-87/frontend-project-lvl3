@@ -1,7 +1,8 @@
 import i18n from 'i18next';
+import onChange from 'on-change';
 import controller from './controller';
-import view from './view';
 import ru from '../texts/ru';
+import { render, renderErrors } from '../utils';
 
 const app = () => {
   i18n.init({
@@ -10,7 +11,9 @@ const app = () => {
     resources: {
       ru,
     },
-  });
+  })
+    .catch((err) => console.error(err))
+    .then((res) => console.log(res));
 
   const state = {
     form: {
@@ -25,7 +28,17 @@ const app = () => {
     errors: {},
   };
 
-  controller(view(state));
+  const watchedState = onChange(state, (path) => {
+    if (path === 'feeds' || path === 'posts') {
+      render(watchedState);
+    }
+
+    if (path === 'errors') {
+      renderErrors(watchedState);
+    }
+  });
+
+  controller(watchedState);
 };
 
 export default app;
