@@ -29,7 +29,7 @@ const controller = (state) => {
           state.posts = [...newFeed.items, ...state.posts];
 
           setTimeout(() => updatePosts(state), 5000);
-          console.log(state);
+          // console.log(state);
         } else {
           // eslint-disable-next-line no-param-reassign
           state.errors = errors;

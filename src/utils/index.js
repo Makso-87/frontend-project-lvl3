@@ -108,7 +108,7 @@ const showModal = (event, state) => {
   const descriptionWithoutLink = description.slice(0, endIndex);
 
   modalTitle.textContent = post.title;
-  modalBody.innerHTML = descriptionWithoutLink;
+  modalBody.textContent = descriptionWithoutLink;
   modalLink.setAttribute('href', post.link);
 
   // console.log(description);
@@ -129,7 +129,7 @@ const setVisited = (event, state) => {
     }
   });
 
-  console.log(';uwerfliuahflhsdfljhgsdflkhjsdflkjhsdflgkujh', state.posts);
+  // console.log(';uwerfliuahflhsdfljhgsdflkhjsdflkjhsdflgkujh', state.posts);
 };
 
 const render = (state) => {
@@ -235,12 +235,12 @@ const updatePosts = (state) => {
           if (matching.length === 0) {
             state.feeds.forEach((feedItem) => {
               if (feedItem.title === newFeed.title) {
-                console.log('До добавления', state.posts);
+                // console.log('До добавления', state.posts);
                 // eslint-disable-next-line no-param-reassign
                 feedItem.items = [newPostItem, ...feedItem.items];
                 // eslint-disable-next-line no-param-reassign
                 state.posts = [newPostItem, ...state.posts];
-                console.log('После добавления', state.posts);
+                // console.log('После добавления', state.posts);
               }
             });
           }
