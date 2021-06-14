@@ -1,13 +1,13 @@
 import onChange from 'on-change';
 import { render, renderErrors } from '../utils/index';
 
-const view = (state) => onChange(state, (path) => {
+const view = (state, i18n) => onChange(state, (path) => {
   if (path === 'feeds' || path === 'posts') {
-    render(state);
+    render(view(state, i18n), i18n);
   }
 
   if (path === 'errors') {
-    renderErrors(state);
+    renderErrors(view(state, i18n));
   }
 });
 
