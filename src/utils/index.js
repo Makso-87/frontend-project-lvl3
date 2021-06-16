@@ -13,6 +13,16 @@ const parseRSS = (data) => {
   return domparser.parseFromString(data, 'application/xml');
 };
 
+const setReadonly = () => {
+  const formElement = document.querySelector('#inputLink');
+  formElement.setAttribute('readonly', 'readonly');
+};
+
+const removeReadonly = () => {
+  const formElement = document.querySelector('#inputLink');
+  formElement.removeAttribute('readonly');
+};
+
 const extractItemData = (item) => {
   const itemChildren = Array.from(item.children);
   const [title] = itemChildren.filter((child) => child.tagName === 'title');
@@ -215,5 +225,5 @@ const updatePosts = (state) => {
 
 export {
   render, makeNewFeed, renderErrors, updatePosts, showModal,
-  setVisited, checkToUniqURL,
+  setVisited, checkToUniqURL, setReadonly, removeReadonly,
 };

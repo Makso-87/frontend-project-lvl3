@@ -17,7 +17,7 @@ export default () => {
 
   const state = {
     form: {
-      status: '',
+      status: 'ready',
       data: {
         link: '',
         responseData: '',

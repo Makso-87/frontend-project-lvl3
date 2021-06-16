@@ -10,9 +10,13 @@ const main = (event, state, i18n) => {
   const formData = new FormData(event.target);
   // eslint-disable-next-line no-param-reassign
   state.form.data.link = formData.get('url');
+  // eslint-disable-next-line no-param-reassign
+  state.form.status = 'starting';
   const errors = validateForm(state, i18n);
 
   if (_.isEmpty(errors)) {
+    // eslint-disable-next-line no-param-reassign
+    state.form.status = 'loading';
     axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${state.form.data.link}&disableCache=true`)
       .then((response) => {
         // eslint-disable-next-line no-param-reassign
@@ -26,9 +30,13 @@ const main = (event, state, i18n) => {
           state.feeds = [newFeed, ...state.feeds];
           // eslint-disable-next-line no-param-reassign
           state.posts = [...newFeed.items, ...state.posts];
+          // eslint-disable-next-line no-param-reassign
+          state.form.status = 'completed';
 
           setTimeout(() => updatePosts(state), 5000);
         } else {
+          // eslint-disable-next-line no-param-reassign
+          state.form.status = 'ready';
           // eslint-disable-next-line no-param-reassign
           state.errors = errorsAfterFetch;
           renderErrors(state);
@@ -36,12 +44,16 @@ const main = (event, state, i18n) => {
       })
       .catch(((error) => {
         // eslint-disable-next-line no-param-reassign
+        state.form.status = 'ready';
+        // eslint-disable-next-line no-param-reassign
         state.form.data.responseData = error.message;
         // eslint-disable-next-line no-param-reassign
         state.errors = validateNet(state, i18n);
         renderErrors(state);
       }));
   } else {
+    // eslint-disable-next-line no-param-reassign
+    state.form.status = 'ready';
     // eslint-disable-next-line no-param-reassign
     state.errors = errors;
     renderErrors(state);
