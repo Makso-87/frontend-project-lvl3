@@ -63,4 +63,28 @@ const validateRSS = (state, i18n) => {
   }
 };
 
-export { validateForm, validateRSS };
+const validateNet = (state, i18n) => {
+  setLocale({
+    mixed: {
+      notOneOf: i18n.t('form.errors.notNet'),
+    },
+  });
+
+  const schema = yup.object()
+    .shape({
+      netError: yup.string().required().notOneOf(['Network Error']),
+    });
+
+  const checkingFields = {
+    netError: state.form.data.responseData,
+  };
+
+  try {
+    schema.validateSync(checkingFields, { abortEarly: false });
+    return {};
+  } catch (error) {
+    return _.keyBy(error.inner, 'path');
+  }
+};
+
+export { validateForm, validateRSS, validateNet };

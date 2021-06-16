@@ -4,7 +4,7 @@ import _ from 'lodash';
 import {
   makeNewFeed, renderErrors, updatePosts,
 } from '../utils/index';
-import { validateRSS, validateForm } from './validators';
+import { validateRSS, validateForm, validateNet } from './validators';
 
 const main = (event, state, i18n) => {
   const formData = new FormData(event.target);
@@ -17,7 +17,7 @@ const main = (event, state, i18n) => {
       .then((response) => {
         // eslint-disable-next-line no-param-reassign
         state.form.data.responseData = response.data.contents;
-        // console.log(response);
+
         const errorsAfterFetch = validateRSS(state, i18n);
 
         if (_.isEmpty(errorsAfterFetch)) {
@@ -28,13 +28,19 @@ const main = (event, state, i18n) => {
           state.posts = [...newFeed.items, ...state.posts];
 
           setTimeout(() => updatePosts(state), 5000);
-          // console.log(state);
         } else {
           // eslint-disable-next-line no-param-reassign
           state.errors = errorsAfterFetch;
           renderErrors(state);
         }
-      });
+      })
+      .catch(((error) => {
+        // eslint-disable-next-line no-param-reassign
+        state.form.data.responseData = error.message;
+        // eslint-disable-next-line no-param-reassign
+        state.errors = validateNet(state, i18n);
+        renderErrors(state);
+      }));
   } else {
     // eslint-disable-next-line no-param-reassign
     state.errors = errors;
