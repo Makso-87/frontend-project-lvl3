@@ -1,6 +1,6 @@
 import onChange from 'on-change';
 import {
-  removeReadonly, render, renderErrors, setReadonly,
+  blockingControls, render, renderErrors, unblockingControls,
 } from '../utils/index';
 
 const view = (state, i18n) => onChange(state, (path) => {
@@ -10,9 +10,9 @@ const view = (state, i18n) => onChange(state, (path) => {
 
   if (path === 'form.status') {
     if (state.form.status === 'starting') {
-      setReadonly();
+      blockingControls();
     } else if (state.form.status !== 'loading') {
-      removeReadonly();
+      unblockingControls();
     }
   }
 

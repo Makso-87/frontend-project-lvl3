@@ -13,14 +13,18 @@ const parseRSS = (data) => {
   return domparser.parseFromString(data, 'application/xml');
 };
 
-const setReadonly = () => {
-  const formElement = document.querySelector('#inputLink');
-  formElement.setAttribute('readonly', 'readonly');
+const blockingControls = () => {
+  const input = document.querySelector('#inputLink');
+  const button = document.querySelector('button[name="add"]');
+  input.setAttribute('readonly', 'readonly');
+  button.setAttribute('disabled', 'disabled');
 };
 
-const removeReadonly = () => {
-  const formElement = document.querySelector('#inputLink');
-  formElement.removeAttribute('readonly');
+const unblockingControls = () => {
+  const input = document.querySelector('#inputLink');
+  const button = document.querySelector('button[name="add"]');
+  input.removeAttribute('readonly');
+  button.removeAttribute('disabled');
 };
 
 const extractItemData = (item) => {
@@ -225,5 +229,5 @@ const updatePosts = (state) => {
 
 export {
   render, makeNewFeed, renderErrors, updatePosts, showModal,
-  setVisited, checkToUniqURL, setReadonly, removeReadonly,
+  setVisited, checkToUniqURL, blockingControls, unblockingControls,
 };
