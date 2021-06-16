@@ -6,7 +6,7 @@ const ru = {
     posts: {
       title: 'Посты',
       post: {
-        button: 'Подробнее',
+        button: 'Просмотр',
       },
     },
     form: {
